@@ -1,8 +1,5 @@
-package me.aboullaite.domain;
+package me.apovn.domain;
 
-/**
- * Created by aboullaite on 2017-02-26.
- */
 
 public class SearchResult {
 

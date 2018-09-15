@@ -1,0 +1,5 @@
+A Messenger Bot
+Use: Spring Boot + messenger4j lib 0.8.0 (old)
+Do: receive callback from FB, get userId, send message. Based on typed text, query spring documentation and return 3 first results.
+Build: mvn clean install
+Run: mvn spring-boot:run

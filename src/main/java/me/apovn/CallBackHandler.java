@@ -1,4 +1,4 @@
-package me.aboullaite;
+package me.apovn;
 
 import com.github.messenger4j.MessengerPlatform;
 import com.github.messenger4j.exceptions.MessengerApiException;
@@ -10,7 +10,7 @@ import com.github.messenger4j.receive.handlers.*;
 import com.github.messenger4j.send.*;
 import com.github.messenger4j.send.buttons.Button;
 import com.github.messenger4j.send.templates.GenericTemplate;
-import me.aboullaite.domain.SearchResult;
+import me.apovn.domain.SearchResult;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -27,9 +27,6 @@ import java.util.List;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-/**
- * Created by aboullaite on 2017-02-26.
- */
 
 @RestController
 @RequestMapping("/callback")
@@ -41,6 +38,7 @@ public class CallBackHandler {
             "https://raw.githubusercontent.com/fbsamples/messenger-platform-samples/master/node/public";
     public static final String GOOD_ACTION = "DEVELOPER_DEFINED_PAYLOAD_FOR_GOOD_ACTION";
     public static final String NOT_GOOD_ACTION = "DEVELOPER_DEFINED_PAYLOAD_FOR_NOT_GOOD_ACTION";
+    public static final String USER_ID = "1244059599050515";
 
     private final MessengerReceiveClient receiveClient;
     private final MessengerSendClient sendClient;
@@ -60,17 +58,19 @@ public class CallBackHandler {
 
         logger.debug("Initializing MessengerReceiveClient - appSecret: {} | verifyToken: {}", appSecret, verifyToken);
         this.receiveClient = MessengerPlatform.newReceiveClientBuilder(appSecret, verifyToken)
-                .onTextMessageEvent(newTextMessageEventHandler())
+                .onTextMessageEvent(newTextMessageEventHandler())               // Invoked when BOT is received new message from user
                 .onQuickReplyMessageEvent(newQuickReplyMessageEventHandler())
                 .onPostbackEvent(newPostbackEventHandler())
                 .onAccountLinkingEvent(newAccountLinkingEventHandler())
                 .onOptInEvent(newOptInEventHandler())
-                .onEchoMessageEvent(newEchoMessageEventHandler())
-                .onMessageDeliveredEvent(newMessageDeliveredEventHandler())
-                .onMessageReadEvent(newMessageReadEventHandler())
+                .onEchoMessageEvent(newEchoMessageEventHandler())               // Invoked when BOT send msg back to user
+                .onMessageDeliveredEvent(newMessageDeliveredEventHandler())     // Invoked after calling newEchoMessageEventHandler()
+                .onMessageReadEvent(newMessageReadEventHandler())               // Invoked right after user read msg that was replied by BOT
                 .fallbackEventHandler(newFallbackEventHandler())
                 .build();
         this.sendClient = sendClient;
+
+        sendTextMessage(USER_ID, "New msg from BOT");
     }
 
     /**
@@ -127,7 +127,7 @@ public class CallBackHandler {
             try {
                 switch (messageText.toLowerCase()) {
 
-
+                    case "hi":
                     case "yo":
                         sendTextMessage(senderId, "Hello, What I can do for you ? Type the word you're looking for");
                         break;

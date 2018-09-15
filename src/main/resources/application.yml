@@ -1,7 +1,7 @@
 messenger4j:
-  appSecret:
+  appSecret :
   verifyToken :
-  pageAccessToken:
+  pageAccessToken :
 
 logging:
   level:
